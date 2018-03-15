@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Compte rendu TP XML</title>
+		<meta charset="iso-8859-1">
+		<meta name="author" content="Mohamed CHALLAL et Etienne DELAHAYE">
+		<meta name="keywords" content="XML, XPath, XSL">
+		<style type="text/css">
+			h3 {
+				color:blue;
+			}
+		</style>
+
+	</head>
+	<body>
+		<p>Binome 3424 : Mohamed CHALLAL, Etienne DELAHAYE</p>
+		Ne pas oublier de rajouter des exemples de réponses pour les questions !
+		<div>
+			<h3>Etape 1 : Exploration de l'instance [XPath]</h3>
+			<ol>
+				<li>
+					<span class="qstXpath">Toutes les capitales</span><br/>
+					<code>//capital</code>
+				</li>
+				<li>
+					<span class="qstXpath">les noms communs des pays</span><br/>
+					<code>//country/name/common</code>
+				</li>
+				<li>
+					<span class="qstXpath">les éléments ayant exactement un attribut</span><br/>
+					<code>//*[count(@*)=1]</code>
+				</li>
+				<li>
+					<span class="qstXpath">les noms officiels des pays en français, pour ceux qui en ont</span><br/>
+					<code>//native_name[@lang="fra"]/official</code>
+				</li>
+				<li>
+					<span class="qstXpath">les deuxièmes noms natives officiels des pays</span><br/>
+					<code>//native_name[position()=2]/official</code>
+				</li>
+				<li>
+					<span class="qstXpath">la somme des superficies (area) des pays d'Europe</span><br/>
+					<code>sum(//country[infosRegion/region="Europe"]/area)</code>
+				</li>
+				<li> <!-- 7 -->
+					<span class="qstXpath">les pays qui n'ont pas de nom natif</span><br/>
+					<code>//country[count(name/native_name)=0]</code>
+				</li>
+				<li>
+					<span class="qstXpath">les pays dont le nom commun n'est pas contenu dans leur nom officiel</span><br/>
+					<code>//country[not(contains(name/official, name/common))]</code>
+				</li>
+				<li>
+					<span class="qstXpath">les noms officiels des pays ayant plus de 8 voisins (borders)</span><br/>
+					<code>//country[count(borders)>8]/name/official</code>
+				</li>
+				<li>
+					<span class="qstXpath">La position de la France dans le document XML</span><br/>
+					<code>count(//country[name/common="France"]/preceding-sibling::*)+1</code>
+				</li>
+				<li>
+					<span class="qstXpath">les noms officiels des pays fédéraux</span><br/>
+					<code>//country/name/official[contains(., "Federal")]</code>
+				</li>
+				<li>
+					<span class="qstXpath">les langues des noms natifs des pays sans doublons </span><br/>
+					<code>//country/name/native_name/@lang[not(. = ../../../preceding-sibling::country/name/native_name/@lang)]</code>
+				</li>
+		</div>
+		<div>
+			<h3>Etape 2  : Mise à jour de l'instance [XML, DTD] </h3>
+			<ol>
+				<li>L'élément qui ne correspond pas à la DTD est l'élément <strong>tld</strong>dans l'élément country.
+					Dans la dtd, on a "tld+" dans "country" qui signifie que tous les pays contiennent 1 ou plusieurs tld. 
+					Et dans le fichier XML, on a un pays (le Kosovo) qui ne contient pas de "tld". Il faut donc changer "tld+" en "tld*", 
+					les pays pourront alors contenir 0 ou plusieurs "tld" </li>
+				<li>L'élément enfant de country qui a une occurence minimale de 0 et qui devrait être de 1 est infosRegion<br>
+					version corrigée :<br/>
+					<span>
+					&lt;!ELEMENT country (name,tld+,codes,currency*,callingCode*,
+					capital,altSpellings+, infosRegion*,languages+,
+					coordinates*,demonym,landlocked,borders*,area)&gt;
+					<span/>
+				<li>qu'est-ce qu'il veut ?</li>
+				</li>
+			</ol>
+		</div>
+
+
+
+
+
+
+
+
+			
+		</ol>
+	</body>
+</html>
