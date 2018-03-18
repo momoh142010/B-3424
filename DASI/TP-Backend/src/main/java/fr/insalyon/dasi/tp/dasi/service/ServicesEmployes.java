@@ -7,9 +7,11 @@ package fr.insalyon.dasi.tp.dasi.service;
 
 import fr.insalyon.dasi.tp.dasi.dao.DAOClient;
 import fr.insalyon.dasi.tp.dasi.dao.DAOEmploye;
+import fr.insalyon.dasi.tp.dasi.dao.DAOMedium;
 import fr.insalyon.dasi.tp.dasi.dao.JpaUtil;
 import fr.insalyon.dasi.tp.dasi.model.Client;
 import fr.insalyon.dasi.tp.dasi.model.Employe;
+import fr.insalyon.dasi.tp.dasi.model.Medium;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,25 +112,26 @@ public class ServicesEmployes {
         ServicesEmployes SE = new ServicesEmployes();
         SE.initialiserLesEmployes();
         
+        Employe e=SE.connecter("zouhair.gireux@posit.if", "jaguar");
+        
+        
+
+       
+        
+        
+        
+        
         //JpaUtil.creerEntityManager();
-        
         //DAOEmploye d = new DAOEmploye();
-        
+        /*
         System.out.println(" ********** deb ...");
-        
-        
-        Employe e=SE.connecter("zouhair.gireux@posit.if", "jaguar0");
-        if(e!=null)
-            System.out.println("introuvable !");
-        else
-            System.out.println(e);
-        
-        System.out.println(" ********** fin ...");
+        Employe e=SE.connecter("zouhair.gireux@posit.if", "jaguar");
+        System.out.println(e);
+        System.out.println(" ********** fin ...");*/
         //JpaUtil.fermerEntityManager();
         
         JpaUtil.destroy();
         
-        System.out.println(" ********** testing ...");
     }
     
     
