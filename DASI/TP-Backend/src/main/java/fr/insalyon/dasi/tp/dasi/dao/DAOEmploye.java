@@ -18,14 +18,15 @@ import javax.persistence.Query;
  */
 public class DAOEmploye {
     
-    public DAOEmploye(){
-       
-        
-    }
+    public DAOEmploye(){    }
     
     public Employe getEmploye(String email, String password) {
         EntityManager em = JpaUtil.obtenirEntityManager();
-        return em.createQuery("select e from Employe e where e.email = :email and e.password = :password", Employe.class).setParameter("email", email).setParameter("password", password).getSingleResult();
+        Query q = em.createQuery("select e from Employe e where e.email = :email and e.password = :password");
+        q.setParameter("email", email).setParameter("password", password);
+        Object o = q.getSingleResult();
+        return (Employe) o;
+        //return em.createQuery("select e from Employe e where e.email = :email and e.password = :password", Employe.class).setParameter("email", email).setParameter("password", password).getSingleResult();
     }
    
     public void persist(Employe e){
@@ -42,6 +43,18 @@ public class DAOEmploye {
         EntityManager em = JpaUtil.obtenirEntityManager();
         Query q = em.createQuery("select e from Employe e where :m in e.mediums and e.disponible=true");
         return q.setParameter("m", m).getResultList();
+    }
+    
+    public Employe getEmployeToAffect(Medium m){
+        EntityManager em = JpaUtil.obtenirEntityManager();
+        Query q = em.createNamedQuery("SELECT e "
+                                    + "FROM Employe e "
+                                    + "WHERE :m in e.mediums and e.disponible=true "
+                                    + "ORDER BY totalAffectations ASC "
+                                    + "LIMIT 1");
+        q.setParameter("m", m);
+        Object o = q.getSingleResult();
+        return (Employe) o;
     }
     
     public Long getTotalAffectations(){
