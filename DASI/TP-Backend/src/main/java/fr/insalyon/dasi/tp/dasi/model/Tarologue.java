@@ -21,9 +21,11 @@ public class Tarologue extends Medium implements Serializable {
     private String cartes;
     
     public Tarologue() {
-        super();
+        super("","","");
     }
-    public Tarologue(String cartes) {
+    
+    public Tarologue(String nom, String bio, String talent, String cartes) {
+        super(nom, bio, talent);
         this.cartes = cartes;
     }
 

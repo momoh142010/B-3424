@@ -26,9 +26,10 @@ public class Voyant extends Medium implements Serializable {
 
     
     public Voyant() {
-        
+        super("","","");
     }
-    public Voyant(String support) {
+    public Voyant(String nom, String bio, String talent, String support) {
+        super(nom, bio, talent);
         this.support = support;
     }
     

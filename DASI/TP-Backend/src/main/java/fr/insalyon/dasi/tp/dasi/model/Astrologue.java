@@ -26,8 +26,9 @@ public class Astrologue extends Medium implements Serializable {
     private String ecole;
     private String promotion;
     
-    public Astrologue() { }
-    public Astrologue(String ecole, String promotion) {
+    public Astrologue() { super("","","");}
+    public Astrologue(String nom, String bio, String talent, String ecole, String promotion) {
+        super(nom, bio, talent);
         this.ecole = ecole;
         this.promotion = promotion;
     }

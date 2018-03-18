@@ -39,6 +39,19 @@ public abstract class Medium implements Serializable {
     protected Collection<Employe> employes;
 
     
+    protected Medium(String nom, String bio, String talent) {
+        this.nom = nom;
+        this.bio = bio;
+        this.talent = talent;
+    }
+    
+    
+    
+    
+    
+    
+
+    
     public Long getId() {
         return id;
     }
@@ -66,6 +79,26 @@ public abstract class Medium implements Serializable {
     public void setTalent(String talent) {
         this.talent = talent;
     }
+    
+    
+    
+    
+    public void addConversation(Conversation c) {
+        this.conversations.add(c);
+    }
+
+    public void addEmploye(Employe e) {
+        this.employes.add(e);
+    }
+    
+    public void removeConversation(Conversation c) {
+        this.conversations.remove(c);
+    }
+
+    public void removeEmploye(Employe e) {
+        this.employes.remove(e);
+    }
+    
     
     
  /*   
