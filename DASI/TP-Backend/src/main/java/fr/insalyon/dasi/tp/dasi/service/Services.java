@@ -21,8 +21,9 @@ public class Services {
       public static void main(String args[]) {
         JpaUtil.init();
         ServicesClients sc = new ServicesClients();
+        ServicesEmployes se = new ServicesEmployes();
         
-        Client c = new Client("jean", "Bernard", null, null, null, null, "jb@a.com", "password");
+        Client c = new Client("Van beurrrrrdeeeeeune", "Alex", null, null, null, null, "jb@a.com", "password");
         sc.inscrire(c);
         sc.inscrire(c);
         

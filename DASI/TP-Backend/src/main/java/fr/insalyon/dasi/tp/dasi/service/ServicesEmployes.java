@@ -28,6 +28,8 @@ public class ServicesEmployes {
         
     }
     
+    // renvoie l'employe avec les identifiants passés en paramètre
+    // renvoie null si aucun employé ne correspond aux identifiants
     public Employe connecter(String email, String password){
         JpaUtil.creerEntityManager();
         DAOEmploye daoEmploye = new DAOEmploye();
@@ -46,6 +48,7 @@ public class ServicesEmployes {
         return emp;
     }
     
+    // persiste l'employé dans la base de données
     public void inscrire(Employe e){
         JpaUtil.creerEntityManager();
         JpaUtil.ouvrirTransaction();
@@ -57,7 +60,8 @@ public class ServicesEmployes {
         JpaUtil.fermerEntityManager();
     }
     
-    public Map<String, Integer> getStats(){
+    // retourne le total de voyances réalisées par employé
+    public Map<String, Integer> getStats2(){
         Map<String, Integer> map =  new HashMap<String, Integer>() ;
         
         JpaUtil.creerEntityManager();
@@ -75,7 +79,8 @@ public class ServicesEmployes {
         return map;
     }
     
-    public Map<String, Double> getStats2(){
+    // retourne la répartition des voyances entre employés 
+    public Map<String, Double> getStats3(){
         Map<String, Double> map =  new HashMap<String, Double>() ;
         
         JpaUtil.creerEntityManager();
@@ -96,7 +101,7 @@ public class ServicesEmployes {
         return map;
     }
     
-    
+    // initialise les employés
     void initialiserLesEmployes(){
         inscrire(new Employe("GIREUX", "Zouhair", "0123456789", "zouhair.gireux@posit.if", "jaguar" , 8));
         inscrire(new Employe("TCHIUMAKOVA", "Nicolas", "095126874", "nicolas.tchiumakova@posit.if", "loutre", 17));
