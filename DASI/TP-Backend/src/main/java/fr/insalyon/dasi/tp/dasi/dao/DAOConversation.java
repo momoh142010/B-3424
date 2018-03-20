@@ -25,6 +25,17 @@ public class DAOConversation {
         em.persist(c);
     }
     
+    public void merge(Conversation c){
+        EntityManager em = JpaUtil.obtenirEntityManager();
+        em.merge(c);
+    }
+    
+    
+    public Conversation getDemandesDeConversations(Employe e){
+        EntityManager em = JpaUtil.obtenirEntityManager();
+        return (Conversation) em.createQuery("select c from conversation c where :e = c.employe AND c.dateDebut=null").setParameter("e", e) .getSingleResult();
+    }
+    
     
     
 }
