@@ -6,7 +6,9 @@
 package fr.insalyon.dasi.tp.dasi.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -39,21 +41,15 @@ public class Employe implements Serializable {
 
     
     @OneToMany(mappedBy="employe")
-    protected Collection<Conversation> conversations;
+    protected List<Conversation> conversations;
     @ManyToMany(mappedBy="employes")
-    protected Collection<Medium> mediums;
+    protected List<Medium> mediums;
+    
     //pas de disponibilité (bool) mais si on n'y arrive pas on le rajoutera
 
     
     
     public Employe() {}
-    
-    public Employe(String nom, String prenom, String numTel, Integer totalAffectations) {
-        this.nom = nom;
-        this.prenom = prenom;
-        this.numTel = numTel;
-        this.totalAffectations = totalAffectations;
-    }
 
     public Employe(String nom, String prenom, String numTel, String email, String password, Integer totalAffectations) {
         this.nom = nom;
@@ -62,6 +58,9 @@ public class Employe implements Serializable {
         this.email = email;
         this.password = password;
         this.totalAffectations = totalAffectations;
+        this.conversations = new ArrayList<>();
+        this.mediums = new ArrayList<>();
+        this.disponible = true;
     }
 
     
@@ -106,11 +105,11 @@ public class Employe implements Serializable {
         return disponible;
     }
 
-    public Collection<Conversation> getConversations() {
+    public List<Conversation> getConversations() {
         return conversations;
     }
 
-    public Collection<Medium> getMediums() {
+    public List<Medium> getMediums() {
         return mediums;
     }
 
@@ -198,7 +197,7 @@ public class Employe implements Serializable {
 
     @Override
     public String toString() {
-        return "fr.insalyon.dasi.tp.dasi.model.Employe[ id=" + id + " ]\n"+nom+" "+prenom+"\n";
+        return "Employe [" + id + " ] "+nom+" "+prenom+"\n";
     }
     
 }

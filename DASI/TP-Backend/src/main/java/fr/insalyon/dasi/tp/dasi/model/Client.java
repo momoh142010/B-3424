@@ -6,8 +6,10 @@
 package fr.insalyon.dasi.tp.dasi.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,13 +36,13 @@ public class Client implements Serializable {
     private String numTel;
     private String email;
     private String password;
-    private String sZodiac;
-    private String sAstro;
+    private String signeZodiaque;
+    private String signeChinois;
     private String couleur;
     private String animal;
     
     @OneToMany(mappedBy="client")
-    protected Collection<Conversation> conversations;
+    protected List<Conversation> conversations;
 
     
     
@@ -51,6 +53,7 @@ public class Client implements Serializable {
         this.nom = nom;
         this.prenom = prenom;
         this.civilite = civilite;
+        this.conversations = new ArrayList<>();
     }
 
     public Client(String nom, String prenom, String civilite, Date dateDeNaissance, String adresse, String numTel, String email, String password) {
@@ -62,6 +65,7 @@ public class Client implements Serializable {
         this.numTel = numTel;
         this.email = email;
         this.password = password;
+        this.conversations = new ArrayList<>();
     }
     
     
@@ -104,12 +108,12 @@ public class Client implements Serializable {
         return password;
     }
 
-    public String getsZodiac() {
-        return sZodiac;
+    public String getSigneZodiaque() {
+        return signeZodiaque;
     }
 
-    public String getsAstro() {
-        return sAstro;
+    public String getSigneChinois() {
+        return signeChinois;
     }
 
     public String getCouleur() {
@@ -120,7 +124,7 @@ public class Client implements Serializable {
         return animal;
     }
 
-    public Collection<Conversation> getConversations() {
+    public List<Conversation> getConversations() {
         return conversations;
     }
 
@@ -161,12 +165,12 @@ public class Client implements Serializable {
         this.password = password;
     }
 
-    public void setsZodiac(String sZodiac) {
-        this.sZodiac = sZodiac;
+    public void setSigneZodiaque(String sZodiac) {
+        this.signeZodiaque = sZodiac;
     }
 
-    public void setsAstro(String sAstro) {
-        this.sAstro = sAstro;
+    public void setSigneChinois(String sAstro) {
+        this.signeChinois = sAstro;
     }
 
     public void setCouleur(String couleur) {
@@ -223,7 +227,7 @@ public class Client implements Serializable {
 
     @Override
     public String toString() {
-        return "fr.insalyon.dasi.tp.dasi.model.Client[ id=" + id + " ]";
+        return "Client [" + id + "] "+nom+" "+prenom+"\n";
     }
     
 }

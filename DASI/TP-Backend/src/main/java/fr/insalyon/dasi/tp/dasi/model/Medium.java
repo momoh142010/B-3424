@@ -6,7 +6,9 @@
 package fr.insalyon.dasi.tp.dasi.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -33,16 +35,18 @@ public abstract class Medium implements Serializable {
     protected String talent;
     
     @OneToMany(mappedBy="medium")
-    protected Collection<Conversation> conversations;
+    protected List<Conversation> conversations;
     
     @ManyToMany
-    protected Collection<Employe> employes;
+    protected List<Employe> employes;
 
     
     protected Medium(String nom, String bio, String talent) {
         this.nom = nom;
         this.bio = bio;
         this.talent = talent;
+        this.conversations = new ArrayList<>();
+        this.employes = new ArrayList<>();
     }
     
     
@@ -100,8 +104,16 @@ public abstract class Medium implements Serializable {
     }
     
     
+    public List<Conversation> getConversations() {
+        return conversations;
+    }
+
+    public List<Employe> getEmployes() {
+        return employes;
+    }
     
- /*   
+    
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -115,18 +127,17 @@ public abstract class Medium implements Serializable {
         if (!(object instanceof Medium)) {
             return false;
         }
-        Tarologue other = (Tarologue) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        Medium other = (Medium) object;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
     
 
     @Override
     public String toString() {
-        return "fr.insalyon.dasi.tp.dasi.model.Tarologue[ id=" + id + " ]";
+        return "Medium : "+nom+"\n";
     }
-    */
+    
+
+    
     
 }
