@@ -6,16 +6,12 @@
 package fr.insalyon.dasi.tp.dasi.service;
 
 import fr.insalyon.dasi.tp.dasi.dao.*;
-import fr.insalyon.dasi.tp.dasi.model.Astrologue;
 import fr.insalyon.dasi.tp.dasi.model.Client;
 import fr.insalyon.dasi.tp.dasi.model.Conversation;
 import fr.insalyon.dasi.tp.dasi.model.Employe;
 import fr.insalyon.dasi.tp.dasi.model.Medium;
-import fr.insalyon.dasi.tp.dasi.model.Tarologue;
-import fr.insalyon.dasi.tp.dasi.model.Voyant;
 import fr.insalyon.dasi.tp.dasi.util.AstroTest;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,7 +45,8 @@ public class ServicesClients {
             
             JpaUtil.annulerTransaction();
             JpaUtil.fermerEntityManager();
-            envoyerMail(false, c);
+            String mail = recupererMailAEnvoyer(false, c);
+            
             return false;
         }
         
@@ -59,20 +56,23 @@ public class ServicesClients {
             d.getClient(c.getEmail());
             JpaUtil.annulerTransaction();
             JpaUtil.fermerEntityManager();
-            envoyerMail(false, c);
+            String mail = recupererMailAEnvoyer(false, c);
+            
             return false;
         }
         catch (Exception e) { //on crée le client si on ne le trouve pas
             try {
                 d.persist(c);
                 JpaUtil.validerTransaction();
-                envoyerMail(true, c);
+                String mail = recupererMailAEnvoyer(true, c);
+                
                 JpaUtil.fermerEntityManager();
                 return true;
             } catch (Exception ee) {
                 JpaUtil.annulerTransaction();
                 JpaUtil.fermerEntityManager();
-                envoyerMail(false, c);
+                String mail = recupererMailAEnvoyer(false, c);
+                
                 return false;
             }
         }
@@ -113,6 +113,8 @@ public class ServicesClients {
         JpaUtil.creerEntityManager();
         JpaUtil.ouvrirTransaction();
         DAOConversation dc = new DAOConversation();
+        DAOEmploye daoEmp = new DAOEmploye();
+        DAOMedium daoMed = new DAOMedium();
         
         Conversation conv = new Conversation();
         conv.setClient(c);
@@ -120,7 +122,7 @@ public class ServicesClients {
         conv.setDateDebut(null);
         conv.setDateFin(null);
         
-        DAOEmploye daoEmp = new DAOEmploye();
+        
         Employe emp = daoEmp.getEmployeToAffect(m);
         if(emp==null)   // aucun employé disponible
             return false;
@@ -131,6 +133,10 @@ public class ServicesClients {
         boolean success = true;
         try {
             dc.persist(conv);
+            emp.addConversation(conv);
+            m.addConversation(conv);
+            daoEmp.merge(emp);
+            daoMed.merge(m);
             JpaUtil.validerTransaction();
         }
         catch (Exception e) {
@@ -146,9 +152,7 @@ public class ServicesClients {
     }
     
     
-    
-    
-    private void envoyerMail(boolean inscriptionReussie, Client c) {
+    private String recupererMailAEnvoyer(boolean inscriptionReussie, Client c) {
         System.out.println("\033[4mExpediteur\033[0m : contact@posit.if\n"
                 +          "\033[4mPour\033[0m : " + c.getEmail()+"\n"
                 +          "\033[4mSujet\033[0m : Bienvenue chez POSIT'IF\n");
@@ -160,7 +164,15 @@ public class ServicesClients {
             System.out.println("\033[4mCorps\033[0m :\n"
                 +           "Bonjour "+c.getPrenom()+",\n"
                 +           "Votre inscription au service POSIT'IF a malencontrueusement échoué... Merci de recommencer ultérieurement.");
+    
+        return "blabla";
     }
+    
+    public String recupererNotificationAEnvoyer(Employe e){
+        String message = "Vous avez une demande de consultation ! ";
+        return message;
+    }
+    
     
     
 }
