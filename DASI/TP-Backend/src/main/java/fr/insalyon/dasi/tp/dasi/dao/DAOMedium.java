@@ -50,9 +50,14 @@ public class DAOMedium {
     // ne fonctionne pas !
     public Long getNbVoyancesDemandees(Medium m){
         EntityManager em = JpaUtil.obtenirEntityManager();
-        Query q = em.createQuery("SELECT count(c.id) FROM Converation c ");// c.medium = :m");
-        //q.setParameter("m", m);
-        return (Long) q.getSingleResult();
+        
+        Query query = em.createQuery("SELECT count(c) FROM Conversation c WHERE :m = c.medium");
+        query.setParameter("m", m);
+        
+        long conversationCount = (Long)query.getSingleResult();
+        //System.out.println(m.toString()+" "+conversationCount);
+        
+        return conversationCount;
     }
     
     

@@ -28,6 +28,17 @@ public class DAOEmploye {
         return (Employe) o;
         //return em.createQuery("select e from Employe e where e.email = :email and e.password = :password", Employe.class).setParameter("email", email).setParameter("password", password).getSingleResult();
     }
+    
+    public Employe getEmploye(String email) {
+        EntityManager em = JpaUtil.obtenirEntityManager();
+        Query q = em.createQuery("select e from Employe e where e.email = :email");
+        q.setParameter("email", email);
+        Object o = q.getSingleResult();
+        return (Employe) o;
+        //return em.createQuery("select e from Employe e where e.email = :email and e.password = :password", Employe.class).setParameter("email", email).setParameter("password", password).getSingleResult();
+    }
+    
+    
    
     public void persist(Employe e){
         EntityManager em = JpaUtil.obtenirEntityManager();
@@ -80,6 +91,7 @@ public class DAOEmploye {
     public Long getTotalAffectations(){
         EntityManager em = JpaUtil.obtenirEntityManager();
         Query q = em.createQuery("SELECT sum(e.totalAffectations) FROM Employe e");
+        
         return (Long) q.getSingleResult();
     }
     
