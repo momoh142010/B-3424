@@ -1,0 +1,48 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>TP 3IF Ajax</title>
+    <meta name="author" content="Elöd EGYED-ZSIGMOND">
+
+    <script type="text/javascript" src="partieJavascript.js"></script>
+	<script type="text/javascript" src="scripts.js"></script>
+
+</head>
+
+<body>
+
+	<div>
+		<input name="button1" type="button" id="question1" onClick="ModifierCouleurArrierePlan('blue');ModifierCouleurTexte('question1','white');" value="Question 1" /> <br/>
+		<input name="button2" type="button" id="question2" onClick="ModifierCouleurArrierePlan('white');" value="Question 2" />	<br/>
+			
+		<input name="button3" type="button" id="question3button" onClick="AfficherLesDonneesDuPays();" value="Question 3" />	
+		<input name="text3" type="text" id="question3text" />
+		<div id="question3Result"><span/></div>
+		
+		<input name="button4" type="button" id="question4" onClick="AfficherImageSVG();" value="Question 4" />
+		<div id="question4Result"><span/></div>
+		
+		<input name="button5" type="button" id="question5" onClick="rendreSVGClickable();" value="Question 5" />
+		<div id="question5Result"><span/></div>
+		
+		<input name="button6" type="button" id="question6" onClick="AfficherCarteDuMonde();" value="Question 6" />
+		<div id="question6Tableau"><span/></div>
+		<div id="question6Carte"><span/></div>
+		
+		
+		<input name="button7" type="button" id="question7" onClick="rendreCarteDuMondeClickable();" value="Question 7" />
+		<div id="question7Result"><span/></div>
+		<input name="button8" type="button" id="question8" onClick="rendreCarteDuMondeTraversables();" value="Question 8" />
+		<div id="question8Result"><span/></div>
+	
+	</div>
+
+
+	
+
+
+</body>
+
+</html>
