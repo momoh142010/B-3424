@@ -5,7 +5,6 @@
  */
 package fr.insalyon.dasi.tp.dasi.dao;
 
-import fr.insalyon.dasi.tp.dasi.model.Employe;
 import fr.insalyon.dasi.tp.dasi.model.Medium;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -47,7 +46,7 @@ public class DAOMedium {
         em.merge(m);
     }
     
-    // ne fonctionne pas !
+    
     public Long getNbVoyancesDemandees(Medium m){
         EntityManager em = JpaUtil.obtenirEntityManager();
         
@@ -55,7 +54,6 @@ public class DAOMedium {
         query.setParameter("m", m);
         
         long conversationCount = (Long)query.getSingleResult();
-        //System.out.println(m.toString()+" "+conversationCount);
         
         return conversationCount;
     }

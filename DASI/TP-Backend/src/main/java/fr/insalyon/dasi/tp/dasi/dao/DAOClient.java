@@ -33,7 +33,6 @@ public class DAOClient {
         Client c = (Client) em.createQuery("select c from Client c where c.email = :email and c.password = :password").setParameter("email", email).setParameter("password", password).getSingleResult();
         Integer foobar = c.getConversations().size(); //POur forcer la méthode à récupérer la liste dixit le prof
         return c;
-        
     }
    
     public void persist(Client c) {

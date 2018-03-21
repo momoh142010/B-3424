@@ -5,7 +5,6 @@
  */
 package fr.insalyon.dasi.tp.dasi.dao;
 
-import fr.insalyon.dasi.tp.dasi.model.Client;
 import fr.insalyon.dasi.tp.dasi.model.Employe;
 import fr.insalyon.dasi.tp.dasi.model.Medium;
 import java.util.List;
@@ -26,7 +25,6 @@ public class DAOEmploye {
         q.setParameter("email", email).setParameter("password", password);
         Object o = q.getSingleResult();
         return (Employe) o;
-        //return em.createQuery("select e from Employe e where e.email = :email and e.password = :password", Employe.class).setParameter("email", email).setParameter("password", password).getSingleResult();
     }
     
     public Employe getEmploye(String email) {
@@ -35,7 +33,6 @@ public class DAOEmploye {
         q.setParameter("email", email);
         Object o = q.getSingleResult();
         return (Employe) o;
-        //return em.createQuery("select e from Employe e where e.email = :email and e.password = :password", Employe.class).setParameter("email", email).setParameter("password", password).getSingleResult();
     }
     
     
@@ -75,18 +72,6 @@ public class DAOEmploye {
         return null;
     }
     
-    
-    /*
-    EntityManager em = JpaUtil.obtenirEntityManager();
-        Query q = em.createNamedQuery("SELECT e "
-                                    + "FROM Employe e "
-                                    + "WHERE :m in e.mediums and e.disponible=true "
-                                    + "ORDER BY totalAffectations ASC "
-                                    + "LIMIT 1");
-        q.setParameter("m", m);
-        Object o = q.getSingleResult();
-        return (Employe) o;
-    */
     
     public Long getTotalAffectations(){
         EntityManager em = JpaUtil.obtenirEntityManager();

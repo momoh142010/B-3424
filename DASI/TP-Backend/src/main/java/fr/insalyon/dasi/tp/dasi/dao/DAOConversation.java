@@ -5,10 +5,8 @@
  */
 package fr.insalyon.dasi.tp.dasi.dao;
 
-import fr.insalyon.dasi.tp.dasi.model.Client;
 import fr.insalyon.dasi.tp.dasi.model.Conversation;
 import fr.insalyon.dasi.tp.dasi.model.Employe;
-import java.util.List;
 import javax.persistence.EntityManager;
 
 /**
@@ -33,7 +31,12 @@ public class DAOConversation {
     
     public Conversation getDemandesDeConversations(Employe e){
         EntityManager em = JpaUtil.obtenirEntityManager();
-        return (Conversation) em.createQuery("select c from conversation c where :e = c.employe AND c.dateDebut=null").setParameter("e", e) .getSingleResult();
+        try{
+            Conversation conv = (Conversation) em.createQuery("select c from Conversation c where :e = c.employe AND c.dateDebut=null").setParameter("e", e) .getSingleResult();
+            return conv;
+        } catch(Exception excep) {
+            return null;
+        }
     }
     
     
