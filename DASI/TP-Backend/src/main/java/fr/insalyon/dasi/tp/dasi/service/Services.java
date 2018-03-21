@@ -5,18 +5,16 @@
  */
 package fr.insalyon.dasi.tp.dasi.service;
 
-import fr.insalyon.dasi.tp.dasi.dao.DAOConversation;
-import fr.insalyon.dasi.tp.dasi.dao.DAOEmploye;
-import fr.insalyon.dasi.tp.dasi.dao.DAOMedium;
 import fr.insalyon.dasi.tp.dasi.dao.JpaUtil;
 import fr.insalyon.dasi.tp.dasi.model.Client;
 import fr.insalyon.dasi.tp.dasi.model.Conversation;
 import fr.insalyon.dasi.tp.dasi.model.Employe;
 import fr.insalyon.dasi.tp.dasi.model.Medium;
-import java.text.DateFormat;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,45 +27,13 @@ public class Services {
     public Services(){  }
     
     
-    static void grosTest(){
-        JpaUtil.init();
-        
-        ServicesEmployes se = new ServicesEmployes();
-        ServicesClients  sc = new ServicesClients();
-        
-        se.initialiser();
-        
-        Employe e = se.connecter("zouhair.gireux@posit.if", "jaguar");
-        System.out.println(e.getMediums().size());
-        Medium m = sc.recupererListeMediums().get(0);
-        System.out.println(m.getEmployes().size());
-        
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Date d = null;
-        try {
-            d = sdf.parse("21/12/2012");
-        } catch (ParseException ex) {
-            Logger.getLogger(Services.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Client c1 = new Client("Roger", "Basile", "M.", d, null, null, "aa@a.fr", "123456");
-        sc.inscrire(c1);
-        
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-	Date date = new Date();
-	System.out.println(dateFormat.format(date));
-        
-        
-        
-        JpaUtil.destroy();
-    }
-    
     
     static void faireUneDemande(){
         
         ServicesEmployes se = new ServicesEmployes();
         ServicesClients  sc = new ServicesClients();
         
-        se.initialiser();
+        se.initialiserBaseDeDonnees();
         
         
         //! connexion avec un client qui n'existe pas !
@@ -126,7 +92,7 @@ public class Services {
         ServicesEmployes se = new ServicesEmployes();
         ServicesClients  sc = new ServicesClients();
         
-        se.initialiser();
+        //se.initialiser();
         
         // les stats
         System.out.println(se.recupererStats1());
@@ -160,12 +126,30 @@ public class Services {
         
         
         // Cedric a reçu une notification !
-        //Employe employe4 = se.connecter("cedric.kemaro@posit.if", "dauphin");
+        Employe employe4 = se.connecter("marah.bou@posit.fr", "tigre");
+        if(employe4==null)
+            System.out.println("mauvais identifiants pour marah.bou@posit.fr ou le compte n'existe pas");
+        else
+            System.out.println(employe4);
+        Conversation conv4 = se.recupererDemandeDeConversations(employe4);
+        System.out.println(conv4);
+        if(conv4!=null){
+            try {
+                List<String> liste = se.recupererPredictions(conv4.getClient(), 1, 3, 2);
+                System.out.println(liste);
+                se.commencerConversation(conv4);
+                se.finirConversation(conv4, "le client a raccroché brusquement !");
+            } catch (IOException ex) {
+                Logger.getLogger(Services.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        System.out.println("************************************************");
         
         
         
-        
-        
+        Conversation conv5 = se.recupererDemandeDeConversations(employe1);
+        System.out.println(conv5);
+        System.out.println("************************************************");
         
     }
     

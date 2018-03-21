@@ -5,7 +5,6 @@
  */
 package fr.insalyon.dasi.tp.dasi.service;
 
-import fr.insalyon.dasi.tp.dasi.dao.DAOClient;
 import fr.insalyon.dasi.tp.dasi.dao.DAOConversation;
 import fr.insalyon.dasi.tp.dasi.dao.DAOEmploye;
 import fr.insalyon.dasi.tp.dasi.dao.DAOMedium;
@@ -17,18 +16,13 @@ import fr.insalyon.dasi.tp.dasi.model.Employe;
 import fr.insalyon.dasi.tp.dasi.model.Medium;
 import fr.insalyon.dasi.tp.dasi.model.Tarologue;
 import fr.insalyon.dasi.tp.dasi.model.Voyant;
-import fr.insalyon.dasi.tp.dasi.util.AstroTest;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.NoResultException;
+import fr.insalyon.dasi.tp.dasi.util.AstroTest;
 
 /**
  *
@@ -62,19 +56,11 @@ public class ServicesEmployes {
     }
     
     // persiste l'employé dans la base de données
-    // TODO : verifier que l'employe n'existe pas déjà
     public boolean inscrire(Employe emp){
         JpaUtil.creerEntityManager();
         JpaUtil.ouvrirTransaction();
         
         DAOEmploye daoEmploye = new DAOEmploye();
-        
-        /*
-        daoEmploye.persist(e);
-        JpaUtil.validerTransaction();
-        JpaUtil.fermerEntityManager();
-        */
-        
         
         try { //si cette adresse email existe déjà, le client n'est pas créé
             daoEmploye.getEmploye(emp.getEmail());
@@ -98,9 +84,6 @@ public class ServicesEmployes {
     
     
     
-    
-    
-    
     public void creerMedium(Medium m){
         JpaUtil.creerEntityManager();
         JpaUtil.ouvrirTransaction();
@@ -112,7 +95,6 @@ public class ServicesEmployes {
         JpaUtil.fermerEntityManager();
     }
     
-    // TODO : à débuguer !
     // nbre de voyances demandées pour chaque medium
     public Map<String, Long> recupererStats1(){
         Map<String, Long> map =  new HashMap<>() ;
@@ -126,21 +108,10 @@ public class ServicesEmployes {
         for (int i = 0; i < mediums.size(); i++) {
             String nom = mediums.get(i).getNom();
             Long nbDemandes = dm.getNbVoyancesDemandees(mediums.get(i));
-            //System.out.println(nbDemandes);
             map.put(nom, nbDemandes);
         }
         
         JpaUtil.fermerEntityManager();
-        
-        /*Iterator i = map.keySet().iterator();
-        while (i.hasNext())
-        {
-            Long valeur = (Long)map.get((String)i.next());
-            System.out.println(valeur);
-        }
-        System.out.println(map);
-        */
-        
         
         
         return map;
@@ -213,7 +184,6 @@ public class ServicesEmployes {
     }
     
     
-    
     public void finirConversation(Conversation c, String Commentaire){
         JpaUtil.creerEntityManager();
         JpaUtil.ouvrirTransaction();
@@ -222,6 +192,11 @@ public class ServicesEmployes {
         c.setDateFin(new Date());
         c.setCommentaire(Commentaire);
         daoConv.merge(c);
+        
+        DAOEmploye daoEmp = new DAOEmploye();
+        Employe emp = c.getEmploye();
+        emp.setDisponible(true);
+        daoEmp.merge(emp);
         
         JpaUtil.validerTransaction();
         JpaUtil.fermerEntityManager();
@@ -232,7 +207,19 @@ public class ServicesEmployes {
     
     
     
-    void initialiser(){
+    public List<String> recupererPredictions(Client client, int niveauAmour, int niveauSante, int niveauTravail) throws IOException{
+        // element 0 : Amour
+        // element 1 : Santé
+        // element 2 : Travail
+        AstroTest astroApi = new AstroTest();
+        List<String> liste = astroApi.getPredictions(client.getCouleur(), client.getAnimal(), niveauAmour, niveauSante, niveauTravail);
+        
+        return liste;
+    }
+
+    
+    // a n'appeler que pour initialiser la base de données
+    void initialiserBaseDeDonnees(){
         Employe e1 = new Employe("GIREUX", "Zouhair", "0123456789", "zouhair.gireux@posit.if", "jaguar" , 8);
         Employe e2 = new Employe("TCHIUMAKOVA", "Nicolas", "095126874", "nicolas.tchiumakova@posit.if", "loutre", 17);
         Employe e3 = new Employe("KEMARO", "Cédric", "0573268941", "cedric.kemaro@posit.if", "dauphin",3);
@@ -250,7 +237,6 @@ public class ServicesEmployes {
         Medium m6 = new Astrologue("Mme Mounia Mounia", "Avenir, avenir, que nous réserves-tu? N'attendez plus, demandez à me consulter!", "Astrologue", "Institut des Nouveaux Savoirs Astrologiques", "2010");
         
         
-        
         creerMedium(m1);
         creerMedium(m2);
         creerMedium(m3);
@@ -260,11 +246,20 @@ public class ServicesEmployes {
         
         e1.addMedium(m1);
         e1.addMedium(m3);
+        e1.addMedium(m4);
+        e2.addMedium(m4);
+        e2.addMedium(m5);
         e2.addMedium(m6);
+        e3.addMedium(m1);
+        e3.addMedium(m4);
+        e3.addMedium(m5);
+        e3.addMedium(m6);
         e4.addMedium(m1);
-        e3.addMedium(m3);
+        e5.addMedium(m2);
         e5.addMedium(m3);
-        
+        e6.addMedium(m1);
+        e6.addMedium(m2);
+        e6.addMedium(m3);
         
         
         
@@ -275,12 +270,21 @@ public class ServicesEmployes {
         inscrire(e5);
         inscrire(e6);
         
+        m1.addEmploye(e1);
         m1.addEmploye(e3);
         m1.addEmploye(e4);
-        m2.addEmploye(e3);
-        m3.addEmploye(e3);
+        m1.addEmploye(e6);
+        m2.addEmploye(e5);
+        m2.addEmploye(e6);
+        m3.addEmploye(e1);
+        m3.addEmploye(e5);
+        m3.addEmploye(e6);
+        m4.addEmploye(e1);
+        m4.addEmploye(e2);
         m4.addEmploye(e3);
+        m5.addEmploye(e2);
         m5.addEmploye(e3);
+        m6.addEmploye(e2);
         m6.addEmploye(e3);
         
         JpaUtil.creerEntityManager();
@@ -296,53 +300,8 @@ public class ServicesEmployes {
         JpaUtil.fermerEntityManager();
         
         
-        /*
-        JpaUtil.creerEntityManager();
-        DAOEmploye d = new DAOEmploye();
-        Employe e = d.getEmployeToAffect(m1);
-        System.out.println("les employes : ");
-        System.out.println(e);
-        JpaUtil.fermerEntityManager();
-        */
-        
-        
     }
     
-    
-    
-    public static void main(String args[]) {
-        JpaUtil.init();
-        
-        ServicesEmployes SE = new ServicesEmployes();
-        SE.initialiser();
-        
-        Employe e=SE.connecter("zouhair.gireux@posit.if", "jaguar");
-        DAOMedium dm = new DAOMedium();
-        DAOEmploye de = new DAOEmploye();
-        Medium m = dm.getByName("Gwenaël").get(0);
-        System.out.println(e);
-        System.out.println(m);
-        
-        e.addMedium(m);
-        m.addEmploye(e);
-
-        dm.persist(m);
-        de.persist(e);
-        
-        System.out.println("ICI : "+SE.connecter("zouhair.gireux@posit.if", "jaguar").getMediums().toString());
-        
-        //JpaUtil.creerEntityManager();
-        //DAOEmploye d = new DAOEmploye();
-        /*
-        System.out.println(" ********** deb ...");
-        Employe e=SE.connecter("zouhair.gireux@posit.if", "jaguar");
-        System.out.println(e);
-        System.out.println(" ********** fin ...");*/
-        //JpaUtil.fermerEntityManager();
-        
-        JpaUtil.destroy();
-        
-    }
     
     
     

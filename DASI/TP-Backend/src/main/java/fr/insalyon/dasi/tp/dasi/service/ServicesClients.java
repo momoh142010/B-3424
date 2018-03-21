@@ -46,7 +46,7 @@ public class ServicesClients {
             JpaUtil.annulerTransaction();
             JpaUtil.fermerEntityManager();
             String mail = recupererMailAEnvoyer(false, c);
-            
+            System.out.println(mail);
             return false;
         }
         
@@ -57,7 +57,7 @@ public class ServicesClients {
             JpaUtil.annulerTransaction();
             JpaUtil.fermerEntityManager();
             String mail = recupererMailAEnvoyer(false, c);
-            
+            System.out.println(mail);
             return false;
         }
         catch (Exception e) { //on crée le client si on ne le trouve pas
@@ -65,14 +65,14 @@ public class ServicesClients {
                 d.persist(c);
                 JpaUtil.validerTransaction();
                 String mail = recupererMailAEnvoyer(true, c);
-                
+                System.out.println(mail);
                 JpaUtil.fermerEntityManager();
                 return true;
             } catch (Exception ee) {
                 JpaUtil.annulerTransaction();
                 JpaUtil.fermerEntityManager();
                 String mail = recupererMailAEnvoyer(false, c);
-                
+                System.out.println(mail);
                 return false;
             }
         }
@@ -108,13 +108,13 @@ public class ServicesClients {
         return liste;
     }
     
-    //TODO : Récupérer l'employé à affecter à la conversation
     public boolean creerConversation(Client c, Medium m) {
         JpaUtil.creerEntityManager();
         JpaUtil.ouvrirTransaction();
         DAOConversation dc = new DAOConversation();
         DAOEmploye daoEmp = new DAOEmploye();
         DAOMedium daoMed = new DAOMedium();
+        DAOClient daoClient = new DAOClient();
         
         Conversation conv = new Conversation();
         conv.setClient(c);
@@ -122,22 +122,35 @@ public class ServicesClients {
         conv.setDateDebut(null);
         conv.setDateFin(null);
         
-        
+       
         Employe emp = daoEmp.getEmployeToAffect(m);
         if(emp==null)   // aucun employé disponible
             return false;
-        emp.setDisponible(false);
-        daoEmp.merge(emp);
-        conv.setEmploye(emp);
+        
         
         boolean success = true;
         try {
+            // on indique que l'employé n'est plus disponible
+            emp.setDisponible(false);
+            daoEmp.merge(emp);
+            
+            // on persiste la conversation
+            conv.setEmploye(emp);
             dc.persist(conv);
+            
+            // on met à jour employé, medium et client
             emp.addConversation(conv);
             m.addConversation(conv);
+            c.addConversation(conv);
+            
             daoEmp.merge(emp);
+            daoClient.merge(c);
             daoMed.merge(m);
+            
             JpaUtil.validerTransaction();
+            
+            String notification = recupererNotificationAEnvoyer(conv);
+            System.out.println(notification);
         }
         catch (Exception e) {
             System.err.println("Error while creating a conversation");
@@ -151,25 +164,27 @@ public class ServicesClients {
         return success;
     }
     
-    
     private String recupererMailAEnvoyer(boolean inscriptionReussie, Client c) {
-        System.out.println("\033[4mExpediteur\033[0m : contact@posit.if\n"
-                +          "\033[4mPour\033[0m : " + c.getEmail()+"\n"
-                +          "\033[4mSujet\033[0m : Bienvenue chez POSIT'IF\n");
+        String mail = "\033[4mExpediteur\033[0m : contact@posit.if\n"
+                +     "\033[4mPour\033[0m : " + c.getEmail()+"\n"
+                +     "\033[4mSujet\033[0m : Bienvenue chez POSIT'IF\n";
+        
         if (inscriptionReussie)
-            System.out.println("\033[4mCorps\033[0m :\n"
-                +           "Bonjour "+c.getPrenom()+",\n"
-                +           "Nous vous confirmons votre inscription au service POSIT'IF. Votre numéro client est : "+c.getId() +".");
+            mail  +=  "\033[4mCorps\033[0m :\n"
+                  +   "Bonjour "+c.getPrenom()+",\n"
+                  +   "Nous vous confirmons votre inscription au service POSIT'IF. Votre numéro client est : "+c.getId() +".";
         else
-            System.out.println("\033[4mCorps\033[0m :\n"
-                +           "Bonjour "+c.getPrenom()+",\n"
-                +           "Votre inscription au service POSIT'IF a malencontrueusement échoué... Merci de recommencer ultérieurement.");
+            mail  +=  "\033[4mCorps\033[0m :\n"
+                  +   "Bonjour "+c.getPrenom()+",\n"
+                  +   "Votre inscription au service POSIT'IF a malencontrueusement échoué... Merci de recommencer ultérieurement.";
     
-        return "blabla";
+        return mail;
     }
     
-    public String recupererNotificationAEnvoyer(Employe e){
-        String message = "Vous avez une demande de consultation ! ";
+    public String recupererNotificationAEnvoyer(Conversation conv){
+        String message = "Voyance demandée pour client "+conv.getClient().getPrenom() + " "
+                        + conv.getClient().getPrenom() + "(#" + conv.getClient().getId() + "), Médium : "
+                        + conv.getMedium().getNom();
         return message;
     }
     
