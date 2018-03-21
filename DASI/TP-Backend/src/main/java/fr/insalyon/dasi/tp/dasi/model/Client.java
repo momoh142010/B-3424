@@ -7,7 +7,6 @@ package fr.insalyon.dasi.tp.dasi.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
@@ -16,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
+import javax.persistence.Version;
 
 
 @Entity
@@ -44,7 +44,8 @@ public class Client implements Serializable {
     @OneToMany(mappedBy="client")
     protected List<Conversation> conversations;
 
-    
+    @Version
+    private Long version;
     
     
     public Client() {    }

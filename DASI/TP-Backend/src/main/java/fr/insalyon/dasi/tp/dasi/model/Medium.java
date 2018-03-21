@@ -7,7 +7,6 @@ package fr.insalyon.dasi.tp.dasi.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,6 +16,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.Version;
 
 /**
  *
@@ -39,6 +39,9 @@ public abstract class Medium implements Serializable {
     
     @ManyToMany
     protected List<Employe> employes;
+    
+    @Version
+    private Long version;
 
     
     protected Medium(String nom, String bio, String talent) {
@@ -134,7 +137,7 @@ public abstract class Medium implements Serializable {
 
     @Override
     public String toString() {
-        return "Medium : "+nom+"\n";
+        return "Medium [" + id + "] "+nom+"\n";
     }
     
 

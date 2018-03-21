@@ -7,7 +7,6 @@ package fr.insalyon.dasi.tp.dasi.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.Version;
 
 /**
  *
@@ -34,8 +34,6 @@ public class Employe implements Serializable {
     private String email;
     private String password;
     private Integer totalAffectations;
-    private Integer hDebut;
-    private Integer hFin;
     
     boolean disponible;
 
@@ -45,8 +43,8 @@ public class Employe implements Serializable {
     @ManyToMany(mappedBy="employes")
     protected List<Medium> mediums;
     
-    //pas de disponibilité (bool) mais si on n'y arrive pas on le rajoutera
-
+    @Version
+    private Long version;
     
     
     public Employe() {}
@@ -93,14 +91,6 @@ public class Employe implements Serializable {
         return totalAffectations;
     }
 
-    public Integer gethDebut() {
-        return hDebut;
-    }
-
-    public Integer gethFin() {
-        return hFin;
-    }
-
     public boolean isDisponible() {
         return disponible;
     }
@@ -135,14 +125,6 @@ public class Employe implements Serializable {
 
     public void setTotalAffectations(Integer totalAffectations) {
         this.totalAffectations = totalAffectations;
-    }
-
-    public void sethDebut(Integer hDebut) {
-        this.hDebut = hDebut;
-    }
-
-    public void sethFin(Integer hFin) {
-        this.hFin = hFin;
     }
 
     public void setDisponible(boolean disponible) {
@@ -197,7 +179,7 @@ public class Employe implements Serializable {
 
     @Override
     public String toString() {
-        return "Employe [" + id + " ] "+nom+" "+prenom+"\n";
+        return "Employe [" + id + "] "+nom+" "+prenom+"\n";
     }
     
 }

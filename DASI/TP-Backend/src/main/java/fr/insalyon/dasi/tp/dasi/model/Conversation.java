@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
+import javax.persistence.Version;
 
 /**
  *
@@ -33,11 +34,13 @@ public class Conversation implements Serializable {
     @ManyToOne
     private Employe employe;
  
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateDebut;
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateFin;
     private String commentaire;
+    
+    
     
     
     public Conversation() {
@@ -135,7 +138,7 @@ public class Conversation implements Serializable {
 
     @Override
     public String toString() {
-        return "fr.insalyon.dasi.tp.dasi.model.Conversation[ id=" + id + " ]";
+        return "Conversation : " + id + "\n\tClient : " + client + "\tMedium : " + medium + "\tEmploye : " + employe;
     }
     
 }
